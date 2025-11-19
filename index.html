@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEMEN | Product Designer</title>
+    
+    <!-- FONTS: Inter (Clean & Tech) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* PALETTE: Apple Style */
+            --bg: #FFFFFF;
+            --bg-card: #F5F5F7;
+            --text-main: #1D1D1F;
+            --text-sec: #86868B;
+            --accent: #0071E3; /* Azure Blue */
+            --accent-glow: rgba(0, 113, 227, 0.15);
+            
+            /* SIZES */
+            --radius: 24px;
+            --container: 1200px;
+            --gap: clamp(100px, 15vh, 180px);
+        }
+
+        /* RESET */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html.lenis { height: auto; } 
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* --- BACKGROUND AURORA (Живой фон) --- */
+        .aurora-blob {
+            position: fixed; top: -20%; right: -10%;
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(0,113,227,0.08) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%; filter: blur(80px); z-index: -1;
+            animation: float 10s infinite alternate;
+        }
+        .aurora-blob-2 {
+            position: fixed; bottom: -20%; left: -10%;
+            width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(255,0,100,0.03) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%; filter: blur(80px); z-index: -1;
+            animation: float 15s infinite alternate-reverse;
+        }
+        @keyframes float { from { transform: translate(0, 0); } to { transform: translate(50px, 50px); } }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 { letter-spacing: -0.02em; font-weight: 700; }
+        
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            line-height: 1.1;
+            text-align: center;
+            background: linear-gradient(180deg, #1D1D1F 20%, #6e6e73 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .section-title { font-size: clamp(2rem, 5vw, 3.5rem); text-align: center; margin-bottom: 60px; }
+        .lead { font-size: 1.2rem; color: var(--text-sec); text-align: center; max-width: 600px; margin: 0 auto 40px; }
+
+        .container { max-width: var(--container); margin: 0 auto; padding: 0 20px; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 14px 30px; background: var(--text-main); color: #fff; border-radius: 50px;
+            text-decoration: none; font-weight: 500; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        
+        .btn-sec { background: #fff; color: var(--text-main); border: 1px solid rgba(0,0,0,0.1); }
+        .btn-sec:hover { background: #f5f5f7; }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 900px;
+            padding: 12px 25px; background: rgba(255,255,255,0.7); backdrop-filter: blur(15px);
+            border-radius: 100px; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        }
+        .logo { font-weight: 700; font-size: 1.1rem; text-decoration: none; color: var(--text-main); }
+        .nav-menu a { text-decoration: none; color: var(--text-sec); font-size: 0.9rem; margin: 0 15px; transition: 0.3s; }
+        .nav-menu a:hover { color: var(--text-main); }
+
+        /* --- HERO --- */
+        .hero { padding-top: 150px; padding-bottom: 100px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* 3D TILT CARD */
+        .hero-card-wrap { perspective: 1000px; margin-top: 60px; width: 100%; max-width: 1000px; }
+        .hero-card {
+            background: #fff; border-radius: var(--radius);
+            height: 500px; width: 100%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05);
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+            transition: transform 0.1s ease-out; /* Smooth tilt */
+        }
+        .hero-card-content {
+            text-align: center; z-index: 2;
+        }
+        .hero-badge {
+            background: #E8F2FF; color: var(--accent); padding: 8px 16px; border-radius: 20px;
+            font-weight: 600; font-size: 0.9rem; display: inline-block; margin-bottom: 20px;
+        }
+        .grid-lines {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 40px 40px; transform: rotate(15deg); z-index: 1; pointer-events: none;
+        }
+
+        /* --- MARQUEE (RUNNING LINE) --- */
+        .marquee {
+            background: var(--text-main); color: #fff; padding: 20px 0; overflow: hidden; white-space: nowrap;
+            transform: rotate(-1deg) scale(1.05); margin: 50px 0;
+        }
+        .marquee-content { display: inline-block; animation: scroll 20s linear infinite; }
+        .marquee span { display: inline-block; margin: 0 40px; font-weight: 600; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+        /* --- SPOTLIGHT BENTO GRID --- */
+        /* Магия: JS будет обновлять --x и --y при движении мыши */
+        .bento-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 320px); gap: 20px;
+        }
+        .spotlight-card {
+            background: var(--bg-card); border-radius: var(--radius); padding: 40px;
+            position: relative; overflow: hidden;
+            border: 1px solid transparent;
+            transition: transform 0.3s;
+        }
+        /* Свечение фонарика */
+        .spotlight-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(800px circle at var(--x) var(--y), rgba(255,255,255,0.8), transparent 40%);
+            opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 1;
+        }
+        .spotlight-card:hover::before { opacity: 1; }
+        .spotlight-card:hover { transform: translateY(-5px); }
+
+        .card-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-wide { grid-column: span 2; }
+        .card-tall { grid-row: span 2; }
+        
+        .b-icon { width: 50px; height: 50px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--accent); box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .b-stat { font-size: 4rem; font-weight: 700; line-height: 1; letter-spacing: -2px; color: var(--text-main); }
+        
+        /* --- PROJECTS (Parallax Cards) --- */
+        .project-item { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 120px; 
+        }
+        .project-item.reverse { direction: rtl; }
+        .project-item.reverse .project-info { direction: ltr; }
+        
+        .project-img-box {
+            height: 500px; border-radius: var(--radius); overflow: hidden; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+        }
+        .project-img { width: 100%; height: 120%; object-fit: cover; transition: transform 0.5s; }
+        .project-img-box:hover .project-img { transform: scale(1.05); }
+        
+        /* --- PRICING --- */
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .price-card {
+            padding: 40px; border-radius: var(--radius); border: 1px solid #eee; background: #fff;
+            transition: 0.3s; position: relative;
+        }
+        .price-card:hover { border-color: var(--accent); box-shadow: 0 20px 50px rgba(0,113,227,0.1); transform: translateY(-10px); }
+        .price-card.popular { background: #F2F8FF; border-color: transparent; }
+        
+        .price-head { margin-bottom: 30px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 20px; }
+        .price-amount { font-size: 2.5rem; font-weight: 700; }
+        .price-list li { display: flex; gap: 10px; margin-bottom: 15px; color: var(--text-sec); font-size: 0.9rem; }
+        .price-list i { color: var(--accent); }
+
+        /* --- FOOTER --- */
+        footer { background: #F5F5F7; padding: 100px 0 50px; text-align: center; border-radius: 60px 60px 0 0; }
+
+        /* --- MOBILE --- */
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .card-wide, .card-tall { grid-column: auto; grid-row: auto; }
+            .project-item, .project-item.reverse { grid-template-columns: 1fr; direction: ltr; gap: 30px; }
+            .project-img-box { height: 350px; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+            .hero-title { font-size: 12vw; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob-2"></div>
+
+    <nav>
+        <a href="#" class="logo">SEMEN.</a>
+        <div class="nav-menu">
+            <a href="#features">Возможности</a>
+            <a href="#work">Кейсы</a>
+            <a href="#pricing">Тарифы</a>
+        </div>
+        <!-- КНОПКА В ШАПКЕ ВЕДЕТ В TELEGRAM -->
+        <a href="https://t.me/semastep1" target="_blank" class="btn" style="padding: 10px 20px; font-size: 0.9rem;">Связаться</a>
+    </nav>
+
+    <!-- 1. HERO (Interactive Tilt) -->
+    <section class="hero container">
+        <div class="hero-badge reveal">Product Designer</div>
+        <h1 class="hero-title reveal">
+            Интерфейсы,<br>которые продают.
+        </h1>
+        <p class="lead reveal">
+            Помогаю бизнесу расти через дизайн. Создаю сайты и приложения с фокусом на метрики, эстетику и скорость.
+        </p>
+        <div class="reveal" style="display: flex; gap: 15px;">
+            <a href="#work" class="btn">Смотреть проекты <i class="fas fa-arrow-right"></i></a>
+            <a href="#pricing" class="btn btn-sec">Узнать цены</a>
+        </div>
+
+        <!-- 3D Card that moves with mouse -->
+        <div class="hero-card-wrap reveal" id="tiltCard">
+            <div class="hero-card">
+                <div class="grid-lines"></div>
+                <div class="hero-card-content">
+                    <div style="font-size: 5rem; color: var(--accent); margin-bottom: 20px;"><i class="fab fa-figma"></i></div>
+                    <h3 style="font-size: 2rem;">Design System</h3>
+                    <p style="color: var(--text-sec);">Scalable & Clean</p>
+                    
+                    <!-- Floating elements inside card -->
+                    <div style="position: absolute; top: 20%; left: 10%; background: #fff; padding: 10px 20px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                        <i class="fas fa-check-circle" style="color: #34C759;"></i> Pixel Perfect
+                    </div>
+                    <div style="position: absolute; bottom: 20%; right: 10%; background: #fff; padding: 10px 20px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                        <i class="fas fa-bolt" style="color: #FF9500;"></i> Fast
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. MARQUEE -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <span>Strategy</span> <span>•</span> <span>UI/UX Design</span> <span>•</span> <span>Web Development</span> <span>•</span> <span>Mobile Apps</span> <span>•</span> <span>Branding</span> <span>•</span> <span>Strategy</span> <span>•</span> <span>UI/UX Design</span>
+        </div>
+    </div>
+
+    <!-- 3. SPOTLIGHT BENTO GRID -->
+    <section id="features" class="container" style="padding-top: 100px;">
+        <h2 class="section-title">Почему выбирают меня</h2>
+        
+        <div class="bento-grid">
+            <!-- Box 1 -->
+            <div class="spotlight-card card-wide" onmousemove="handleMove(event)">
+                <div class="card-content">
+                    <div class="b-icon"><i class="fas fa-rocket"></i></div>
+                    <div>
+                        <h3>Скорость загрузки</h3>
+                        <p style="color: var(--text-sec); margin-top: 10px;">Мои сайты загружаются за 0.5-1.5 секунды. Google любит быстрые сайты, а клиенты не уходят из-за ожидания.</p>
+                    </div>
+                    <div class="b-stat" style="margin-top: 20px;">99/100</div>
+                </div>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="spotlight-card" onmousemove="handleMove(event)">
+                <div class="card-content">
+                    <div class="b-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Mobile First</h3>
+                    <p style="color: var(--text-sec);">Идеально на любом экране.</p>
+                </div>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="spotlight-card card-tall" onmousemove="handleMove(event)">
+                <div class="card-content">
+                    <div class="b-icon"><i class="fas fa-layer-group"></i></div>
+                    <h3>Полный цикл</h3>
+                    <p style="color: var(--text-sec);">От прототипа на салфетке до готового кода на сервере.</p>
+                    <ul style="margin-top: 30px; list-style: none; color: var(--text-main); font-weight: 600; line-height: 2;">
+                        <li><i class="fas fa-check" style="color: var(--accent); margin-right: 10px;"></i>Аналитика</li>
+                        <li><i class="fas fa-check" style="color: var(--accent); margin-right: 10px;"></i>Прототип</li>
+                        <li><i class="fas fa-check" style="color: var(--accent); margin-right: 10px;"></i>Дизайн</li>
+                        <li><i class="fas fa-check" style="color: var(--accent); margin-right: 10px;"></i>Верстка</li>
+                        <li><i class="fas fa-check" style="color: var(--accent); margin-right: 10px;"></i>Запуск</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Box 4 -->
+            <div class="spotlight-card" onmousemove="handleMove(event)">
+                <div class="card-content">
+                    <div class="b-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Конверсия</h3>
+                    <div class="b-stat" style="font-size: 3rem; margin-top: auto;">+40%</div>
+                </div>
+            </div>
+
+            <!-- Box 5 -->
+            <div class="spotlight-card" onmousemove="handleMove(event)">
+                <div class="card-content">
+                    <div class="b-icon"><i class="fas fa-code"></i></div>
+                    <h3>Чистый код</h3>
+                    <p style="color: var(--text-sec);">React, Next.js, GSAP.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. PROJECTS -->
+    <section id="work" class="container" style="padding-top: 180px;">
+        <h2 class="section-title">Избранные кейсы</h2>
+
+        <!-- Project 1 -->
+        <div class="project-item reveal">
+            <div class="project-img-box">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop" class="project-img parallax-img" alt="Project">
+            </div>
+            <div class="project-info">
+                <div style="color: var(--accent); font-weight: 600; margin-bottom: 10px;">Fintech App</div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 20px;">Neo Banking</h3>
+                <p style="color: var(--text-sec); margin-bottom: 30px;">Полный редизайн банковского приложения. Акцент на простоте переводов и аналитике расходов. Рост вовлеченности на 30%.</p>
+                <a href="#" class="btn btn-sec">Смотреть кейс</a>
+            </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-item reverse reveal">
+            <div class="project-img-box">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop" class="project-img parallax-img" alt="Project">
+            </div>
+            <div class="project-info">
+                <div style="color: var(--accent); font-weight: 600; margin-bottom: 10px;">E-Commerce</div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 20px;">Lumina Shop</h3>
+                <p style="color: var(--text-sec); margin-bottom: 30px;">Минималистичный магазин одежды. Быстрая загрузка, удобные фильтры и интеграция с платежными системами.</p>
+                <a href="#" class="btn btn-sec">Смотреть кейс</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. PRICING -->
+    <section id="pricing" class="container" style="padding-top: 100px; margin-bottom: 150px;">
+        <h2 class="section-title">Стоимость</h2>
+        
+        <div class="pricing-grid">
+            <!-- Plan 1 -->
+            <div class="price-card reveal">
+                <div class="price-head">
+                    <h3>Landing Page</h3>
+                    <div style="color: var(--text-sec); font-size: 0.9rem; margin-top: 5px;">Быстрый старт</div>
+                </div>
+                <div class="price-amount">50k ₽</div>
+                <ul class="price-list">
+                    <li><i class="fas fa-check"></i> 1 Страница</li>
+                    <li><i class="fas fa-check"></i> Адаптивная верстка</li>
+                    <li><i class="fas fa-check"></i> Срок: 7 дней</li>
+                </ul>
+                <!-- ССЫЛКА НА TELEGRAM -->
+                <a href="https://t.me/semastep1" target="_blank" class="btn btn-sec" style="width: 100%; justify-content: center;">Заказать</a>
+            </div>
+
+            <!-- Plan 2 -->
+            <div class="price-card popular reveal" style="transform: scale(1.05);">
+                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Popular</div>
+                <div class="price-head">
+                    <h3>Corporate</h3>
+                    <div style="color: var(--text-sec); font-size: 0.9rem; margin-top: 5px;">Имиджевый сайт</div>
+                </div>
+                <div class="price-amount" style="color: var(--accent);">120k ₽</div>
+                <ul class="price-list">
+                    <li><i class="fas fa-check"></i> до 7 страниц</li>
+                    <li><i class="fas fa-check"></i> Админ-панель (CMS)</li>
+                    <li><i class="fas fa-check"></i> Анимации</li>
+                    <li><i class="fas fa-check"></i> Срок: 20 дней</li>
+                </ul>
+                <!-- ССЫЛКА НА TELEGRAM -->
+                <a href="https://t.me/semastep1" target="_blank" class="btn" style="width: 100%; justify-content: center;">Заказать</a>
+            </div>
+
+            <!-- Plan 3 -->
+            <div class="price-card reveal">
+                <div class="price-head">
+                    <h3>Business</h3>
+                    <div style="color: var(--text-sec); font-size: 0.9rem; margin-top: 5px;">Сложные решения</div>
+                </div>
+                <div class="price-amount">200k+ ₽</div>
+                <ul class="price-list">
+                    <li><i class="fas fa-check"></i> E-Commerce / Каталог</li>
+                    <li><i class="fas fa-check"></i> Личный кабинет</li>
+                    <li><i class="fas fa-check"></i> Интеграции</li>
+                    <li><i class="fas fa-check"></i> Срок: от 1 мес.</li>
+                </ul>
+                <!-- ССЫЛКА НА TELEGRAM -->
+                <a href="https://t.me/semastep1" target="_blank" class="btn btn-sec" style="width: 100%; justify-content: center;">Обсудить</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FOOTER -->
+    <footer id="contact">
+        <div class="container">
+            <h2 style="font-size: 3rem; margin-bottom: 30px;">Готовы начать?</h2>
+            <p class="lead">Напишите мне, и мы обсудим ваш проект уже сегодня.</p>
+            <!-- ГЛАВНАЯ КНОПКА TELEGRAM В ПОДВАЛЕ -->
+            <a href="https://t.me/semastep1" target="_blank" class="btn" style="font-size: 1.2rem; padding: 20px 40px;">
+                <i class="fab fa-telegram-plane"></i> Написать в Telegram
+            </a>
+            
+            <div style="margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; color: var(--text-sec); font-size: 0.9rem;">
+                <div>© 2025 Semen Design.</div>
+                <div style="display: flex; gap: 20px;">
+                    <a href="#" style="color: inherit; text-decoration: none;">Behance</a>
+                    <a href="#" style="color: inherit; text-decoration: none;">Instagram</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // 1. SMOOTH SCROLL
+        const lenis = new Lenis({ smooth: true, duration: 1.2 });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 2. TILT EFFECT FOR HERO CARD
+        const cardWrap = document.getElementById('tiltCard');
+        const card = cardWrap.querySelector('.hero-card');
+        
+        cardWrap.addEventListener('mousemove', (e) => {
+            const rect = cardWrap.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const xPct = x / rect.width - 0.5;
+            const yPct = y / rect.height - 0.5;
+            
+            // Tilt logic
+            gsap.to(card, {
+                rotationY: xPct * 10,
+                rotationX: -yPct * 10,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+        });
+        
+        cardWrap.addEventListener('mouseleave', () => {
+            gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.5 });
+        });
+
+        // 3. SPOTLIGHT EFFECT (Flashlight)
+        function handleMove(e) {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.setProperty('--x', `${x}px`);
+            card.style.setProperty('--y', `${y}px`);
+        }
+
+        // 4. REVEAL ANIMATIONS
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach(el => {
+            gsap.fromTo(el, 
+                { y: 40, opacity: 0 },
+                {
+                    y: 0, opacity: 1, duration: 1, ease: "power3.out",
+                    scrollTrigger: { trigger: el, start: "top 85%" }
+                }
+            );
+        });
+
+        // 5. PARALLAX IMAGES
+        document.querySelectorAll('.parallax-img').forEach(img => {
+            gsap.to(img, {
+                yPercent: 15,
+                ease: "none",
+                scrollTrigger: { trigger: img.parentElement, scrub: true }
+            });
+        });
+
+    </script>
+</body>
+</html>
